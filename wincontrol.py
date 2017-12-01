@@ -11,7 +11,7 @@ class WinCtrl:
     def open_device_manager(self):
         '''@command: open device manager
         '''
-        call(["mmc", "devmgmt.msc"])
+        subprocess.Popen("mmc devmgmt.msc")
     
     def open_network_connections(self):
         '''@command: open network connections

@@ -223,3 +223,8 @@ assistant.start()
 #TODO: automatic db creator based on files.py
 #TODO: open folder user->app_data, python_home, python_sites
 #TODO: mouse click should be taken as last key pressed action , to avoid showing assistant while checking out files to copy
+#TODO: create folder in userAppData with datafiles to be access everywhere
+#TODO: think of access rights while running pyssistant
+#TODO: change main.py to pyssistant.py
+#BUG: in some cases pyssistant eat to much enter (maybe he blocks focus?)
+#TODO: also if ctrl is to long , don't show pyssistant
