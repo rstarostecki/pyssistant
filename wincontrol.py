@@ -3,6 +3,14 @@ import subprocess
 from subprocess import call
 import knownpaths
 
+pyssistant_commands = [ ("WinCtrl","open_device_manager","open device manager"),
+                        ("WinCtrl","open_network_connections","open network connections"), 
+                        ("WinCtrl","edit_environment_variables","edit environment variables"),
+                        ("WinCtrl","edit_timedate_settings","edit timedate settings"),
+                        ("WinCtrl","open_folder_downloads","open folder downloads"),
+                        ("WinCtrl","run_cmd","run cmd")]
+
+
 class WinCtrl:
 
     def __init__(self):
