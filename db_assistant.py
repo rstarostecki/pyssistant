@@ -74,30 +74,33 @@ class AssistantDataBase:
     def lookup(self, command_name, limit):
         results = []
         con = dbapi2.connect(Infrastructure().get_db_path()) 
-        res = con.execute('SELECT class_name, entry_name, command_name\
-                            from commands where command_name like "%'+command_name+'%"\
-                            ORDER BY command_name LIMIT '+str(limit)+'')
+        phrases = command_name.split()
+        if len(phrases) == 1:
+            res = con.execute('SELECT class_name, entry_name, command_name\
+                        from commands where command_name like "%'+phrases[0]+'%"\
+                        ORDER BY command_name LIMIT '+str(limit)+'')
+        elif len(phrases) == 2:
+            res = con.execute('SELECT class_name, entry_name, command_name\
+                        from commands where command_name like "%'+phrases[0]+'%" and command_name like "%'+phrases[1]+'%"\
+                        ORDER BY command_name LIMIT '+str(limit)+'')
+        elif len(phrases) > 2:
+            res = con.execute('SELECT class_name, entry_name, command_name\
+                        from commands where command_name like "%'+phrases[0]+'%"\
+                            and command_name like "%'+phrases[1]+'%"\
+                            and command_name like "%'+phrases[2]+'%"\
+                        ORDER BY command_name LIMIT '+str(limit)+'')
+        else:
+            res = con.execute('SELECT class_name, entry_name, command_name\
+                        from commands\
+                        ORDER BY command_name LIMIT '+str(limit)+'')
+
         for r in res:
             results.append(r)
-        return results
+
+        return results 
 
     def update_known_modules(self):
         self.update_module("db_assistant")
         self.update_module("wincontrol")
         self.update_module("infrastructure")
         
-        
-        
-        
-#a = AssistantDataBase()
-#a.reinit()
-#a.insert(("wincontrol","WinCtrl","open_device_manager","open device manager"))
-#a.insert(("wincontrol","WinCtrl","open_network_connections","open network connections"))
-#a.insert(("wincontrol","WinCtrl","edit_environment_variables","edit environment variables"))
-##a.insert(("wincontrol","WinCtrl","edit_timedate_settings","edit timedate settings"))
-#AssistantDataBase().insert(("wincontrol","WinCtrl","open_folder_downloads","open folder downloads"))
-#AssistantDataBase().insert(("wincontrol","WinCtrl","run_cmd","run cmd"))
-
-
-#print(a.lookup("2",5))
-#print(a.lookup("4",5))
