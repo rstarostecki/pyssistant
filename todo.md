@@ -6,7 +6,7 @@
 ### PRIORITY 1
 
 ### PRIORITY 2
-+ make readme 
++ update readme: info about knownpath.py author, and update more info
 + clipboard copy and direct entering - module to paste frequently used phrases, like ipv6 ll or bash commands scripts 
 
 ### PRIORITY 3
