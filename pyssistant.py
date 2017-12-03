@@ -15,10 +15,6 @@ def click(position):
     mouse.click(Button.left, 1)
     mouse.position = lastpos
 
-
-
-
-
 class AssistantGUI:
     
     def __init__(self):
@@ -227,19 +223,3 @@ class Assistant:
                 text +="   "+name+"\n"
             i+=1
         self.gui.update_text(text)
-
-
-
-
-#TODO: open folder user->app_data, python_home, python_sites
-#TODO: mouse click should be taken as last key pressed action , to avoid showing assistant while checking out files to copy
-#TODO: think of access rights while running pyssistant
-#BUG: in some cases pyssistant eat to much enter (maybe he blocks focus?)
-#TODO: also if ctrl is to long , don't show pyssistant
-#TODO: logging!!!!
-
-
-#DONE: Infrastucture should be able to restart pyssistant
-#DONE: automatic db creator based on files.py
-#DONE: create folder in userAppData with datafiles to be access everywhere
-#DONE: change main.py to pyssistant.py
