@@ -15,10 +15,10 @@ class Infrastructure:
         if Infrastructure.instance == None:
             Infrastructure.instance = Infrastructure.__Infrastructure()
             Infrastructure.instance.PROGRAMS_PATH = knownpaths.get_path(
-                knownpaths.FOLDERID.LocalAppData, user_handle=knownpaths.UserHandle.current) +"/Programs"
-            Infrastructure.instance.ROOT_PATH = Infrastructure.instance.PROGRAMS_PATH+"/Pyssistant"
-            Infrastructure.instance.DB_PATH = Infrastructure.instance.ROOT_PATH+"/commands.db"
-            Infrastructure.instance.MODULES_DATA_PATH = Infrastructure.instance.ROOT_PATH+"/modules_data"
+                knownpaths.FOLDERID.LocalAppData, user_handle=knownpaths.UserHandle.current) +"\\Programs"
+            Infrastructure.instance.ROOT_PATH = Infrastructure.instance.PROGRAMS_PATH+"\\Pyssistant"
+            Infrastructure.instance.DB_PATH = Infrastructure.instance.ROOT_PATH+"\\commands.db"
+            Infrastructure.instance.MODULES_DATA_PATH = Infrastructure.instance.ROOT_PATH+"\\modules_data"
 
     def build_path(self):
         pathlib.Path(Infrastructure.instance.ROOT_PATH).mkdir(parents=True, exist_ok=True)
@@ -27,11 +27,14 @@ class Infrastructure:
     def get_db_path(self):
         return Infrastructure.instance.DB_PATH
 
+    def get_root_path(self):
+        return Infrastructure.instance.ROOT_PATH
+
     def set_db_path(self, path):
         Infrastructure.instance.DB_PATH = path
 
     def get_module_data_path(self, module_name):
-        path = Infrastructure.instance.MODULES_DATA_PATH+"/"+module_name
+        path = Infrastructure.instance.MODULES_DATA_PATH+"\\"+module_name
         pathlib.Path(path).mkdir(parents=True, exist_ok=True)
         return path
 
@@ -40,3 +43,5 @@ class Infrastructure:
 
     def restart(self):
         os.execv(sys.executable, ['python'] + sys.argv)
+
+

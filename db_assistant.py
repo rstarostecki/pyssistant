@@ -103,4 +103,5 @@ class AssistantDataBase:
         self.update_module("db_assistant")
         self.update_module("wincontrol")
         self.update_module("infrastructure")
+        self.update_module("prompter")
         

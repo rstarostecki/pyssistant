@@ -97,8 +97,13 @@ class Executor:
         if len(self.commands) > self.position:
             class_name, entry_name, command_name = self.commands[self.position]
             try:
-                getattr(self.objects[class_name], entry_name)()
                 self.reset()
+
+                #todo: make it more clear what are you doing here
+                if hasattr(self.objects[class_name], "set_command"):
+                    getattr(self.objects[class_name], "set_command")(command_name)
+
+                getattr(self.objects[class_name], entry_name)()
                 return True
             except:
                 print("Command: "+command_name+" failed")
@@ -122,7 +127,7 @@ class Executor:
 
     def _update(self):
         if self.last_command != self.command_name:
-            cmds = self.db.lookup(self.command_name, 16)
+            cmds = self.db.lookup(self.command_name, 12)
             self.commands.clear()
             for cmd in cmds:
                 self.commands.append(cmd)
@@ -181,20 +186,21 @@ class Assistant:
         try:
             self.lastKeyPressed = key
             if self.visible and self.gui.is_focused():
-                if key == keyboard.Key.space:
-                    self.executor.append_char(" ")
-                elif key == keyboard.Key.backspace:
-                    self.executor.remove_char()
-                elif hasattr(key,"char") and key.char.isalnum() :
-                    self.executor.append_char(key.char)
-                if key == keyboard.Key.enter:
-                    if self.executor.run() == True:
-                        self.gui.hide()
-                        self.visible = False
-                elif key == keyboard.Key.up:
+                if key == keyboard.Key.up:
                     self.executor.move_up()
                 elif key == keyboard.Key.down:
                     self.executor.move_down()
+                elif (key == keyboard.Key.enter) or (hasattr(key,"char") and key.char == '`'):
+                    if self.executor.run() == True:
+                        self.gui.hide()
+                        self.visible = False
+                elif key == keyboard.Key.space:
+                    self.executor.append_char(" ")
+                elif key == keyboard.Key.backspace:
+                    self.executor.remove_char()
+                elif hasattr(key,"char") and key.char.isalnum():
+                    self.executor.append_char(key.char)
+                
         except AttributeError:
             print("AttributeError")
 

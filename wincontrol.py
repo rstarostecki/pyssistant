@@ -4,6 +4,7 @@ from subprocess import call
 import knownpaths
 import sys
 import pathlib
+from infrastructure import Infrastructure
 
 pyssistant_commands = [ ("WinCtrl","open_device_manager","open device manager"),
                         ("WinCtrl","open_network_connections","open network connections"), 
@@ -13,6 +14,7 @@ pyssistant_commands = [ ("WinCtrl","open_device_manager","open device manager"),
                         ("WinCtrl","open_folder_appdata","open folder appdata"),
                         ("WinCtrl","open_folder_python","open folder python"),
                         ("WinCtrl","open_folder_python_sites","open folder python sites"),
+                        ("WinCtrl","open_pyssistant_home","open folder pyssistant"),
                         ("WinCtrl","run_cmd","run cmd")]
 
 
@@ -49,6 +51,9 @@ class WinCtrl:
 
     def open_folder_python_sites(self):
         self.open_folder(str(pathlib.Path(sys.executable).parent)+"\\Lib\\site-packages")
+
+    def open_pyssistant_home(self):
+        self.open_folder(Infrastructure().get_root_path())
 
     def run_cmd(self):
         subprocess.Popen("cmd")
