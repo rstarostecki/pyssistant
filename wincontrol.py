@@ -15,6 +15,8 @@ pyssistant_commands = [ ("WinCtrl","open_device_manager","open device manager"),
                         ("WinCtrl","open_folder_python","open folder python"),
                         ("WinCtrl","open_folder_python_sites","open folder python sites"),
                         ("WinCtrl","open_pyssistant_home","open folder pyssistant"),
+                        ("WinCtrl","open_folder_startup","open folder startup"),
+                        ("WinCtrl","open_folder_startup_all","open folder startup common"),
                         ("WinCtrl","run_cmd","run cmd")]
 
 
@@ -41,6 +43,14 @@ class WinCtrl:
     def open_folder_downloads(self):
         self.open_folder(knownpaths.get_path(
             knownpaths.FOLDERID.Downloads, user_handle=knownpaths.UserHandle.current))
+                
+    def open_folder_startup(self):
+        self.open_folder(knownpaths.get_path(
+            knownpaths.FOLDERID.Startup, user_handle=knownpaths.UserHandle.current))
+    
+    def open_folder_startup_all(self):
+        self.open_folder(knownpaths.get_path(
+            knownpaths.FOLDERID.CommonStartup, user_handle=knownpaths.UserHandle.current))
 
     def open_folder_appdata(self):
         self.open_folder(knownpaths.get_path(
