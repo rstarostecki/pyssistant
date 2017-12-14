@@ -1,7 +1,8 @@
 
-from pynput import keyboard, mouse
+import mouse
 from infrastructure import Infrastructure
 import pathlib
+import keyboard
 
 prompter_universal_entry = "prompter_entry"
 
@@ -49,5 +50,5 @@ class Prompter:
         pass
 
     def prompter(self, text):
-        mouse.Controller().click(mouse.Button.left, 1)
-        keyboard.Controller().type(text)
+        mouse.click()
+        keyboard.write(text)

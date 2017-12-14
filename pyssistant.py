@@ -1,19 +1,16 @@
-
-
 from tkinter import *
 import threading
 from importlib import import_module
-from pynput import keyboard
-from pynput.mouse import Button, Controller
+import keyboard
+import mouse
 from db_assistant import AssistantDataBase
 from infrastructure import Infrastructure
 
-def click(position):
-    mouse = Controller()
-    lastpos = mouse.position
-    mouse.position = position
-    mouse.click(Button.left, 1)
-    mouse.position = lastpos
+def click(nx,ny):
+    x, y = mouse.get_position()
+    mouse.move(nx,ny)
+    mouse.click()
+    mouse.move(x,y)
 
 class AssistantGUI:
     
@@ -29,7 +26,7 @@ class AssistantGUI:
 
     def show(self):
         self.root.deiconify()
-        click((self.root.winfo_x(), self.root.winfo_y()))
+        click(self.root.winfo_x(), self.root.winfo_y())
     
     def hide(self):
         self.root.withdraw()
@@ -154,9 +151,8 @@ class Assistant:
         self.executor.set_content_listener(self.content_changed)
         self.executor.set_command_listener(self.command_changed)
         self.executor.start()
-        self.mainTread = threading.Thread(target=self.worker)
         self.visible = False
-        self.lastKeyPressed = keyboard.Key.ctrl_l
+        self.lastKeyPressed = "left ctrl"
         self.updateContent(self.executor.get_commands())
 
     def build_default_db(self):
@@ -171,42 +167,36 @@ class Assistant:
         self.gui.update_head(data)
 
     def start(self):
-        self.mainTread.start()
+        keyboard.hook(self.keyboard_handler)
+        mouse.hook(self.mouse_handler)
         mainloop()
-        self.listenerThread.stop()
+    
+    def mouse_handler(self, e):
+        if isinstance(e, mouse.ButtonEvent):
+            self.lastKeyPressed = "mouse "+e.event_type
 
-    def worker(self):
-        with keyboard.Listener(
-            on_press=self.on_press,
-            on_release=self.on_release) as listener:
-            self.listenerThread = listener
-            self.listenerThread.join()
-
-    def on_press(self, key):
-        try:
+    def keyboard_handler(self, e):
+        key = e.name
+        if(e.event_type == "down"):
             self.lastKeyPressed = key
             if self.visible and self.gui.is_focused():
-                if key == keyboard.Key.up:
+                if key == "up":
                     self.executor.move_up()
-                elif key == keyboard.Key.down:
+                elif key == "down":
                     self.executor.move_down()
-                elif (key == keyboard.Key.enter) or (hasattr(key,"char") and key.char == '`'):
+                elif (key == "enter") or (key == "`"):
                     if self.executor.run() == True:
                         self.gui.hide()
                         self.visible = False
-                elif key == keyboard.Key.space:
+                elif key == "space":
                     self.executor.append_char(" ")
-                elif key == keyboard.Key.backspace:
+                elif key == "backspace":
                     self.executor.remove_char()
-                elif hasattr(key,"char") and key.char.isalnum():
-                    self.executor.append_char(key.char)
-                
-        except AttributeError:
-            print("AttributeError")
-
-    def on_release(self, key):
-        if key == keyboard.Key.ctrl_l and self.lastKeyPressed == key:
-            self.activationTrigger()
+                elif key.isalnum():
+                    self.executor.append_char(key)
+        else:
+            if key == "left ctrl" and self.lastKeyPressed == key:
+                self.activationTrigger()
 
     def activationTrigger(self):
         if self.visible:
