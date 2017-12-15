@@ -51,4 +51,7 @@ class Prompter:
 
     def prompter(self, text):
         mouse.click()
-        keyboard.write(text)
+        if "\n" in text :
+            keyboard.write(text)
+        else :
+            keyboard.write(text, exact=True)
