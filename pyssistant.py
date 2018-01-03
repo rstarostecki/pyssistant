@@ -5,6 +5,7 @@ import keyboard
 import mouse
 from db_assistant import AssistantDataBase
 from infrastructure import Infrastructure
+import time
 
 def click(nx,ny):
     x, y = mouse.get_position()
@@ -153,7 +154,10 @@ class Assistant:
         self.executor.start()
         self.visible = False
         self.lastKeyPressed = "left ctrl"
+        self.lastPressedTime = time.time()
         self.updateContent(self.executor.get_commands())
+
+        self.showTriggerLastTime = 0.0
 
     def build_default_db(self):
         db = AssistantDataBase()
@@ -178,7 +182,9 @@ class Assistant:
     def keyboard_handler(self, e):
         key = e.name
         if(e.event_type == "down"):
-            self.lastKeyPressed = key
+            if self.lastKeyPressed != key:
+                self.lastKeyPressed = key
+                self.lastPressedTime = time.time()
             if self.visible and self.gui.is_focused():
                 if key == "up":
                     self.executor.move_up()
@@ -196,16 +202,23 @@ class Assistant:
                     self.executor.append_char(key)
         else:
             if key == "left ctrl" and self.lastKeyPressed == key:
+                self.lastKeyPressed = ""
                 self.activationTrigger()
 
     def activationTrigger(self):
         if self.visible:
             self.gui.hide()
             self.visible = False
-        else:
+        elif time.time() - self.lastPressedTime < 0.25 :
+            self.showTrigger()
+    
+    def showTrigger(self):
+        if time.time() - self.showTriggerLastTime < 0.25 :
             self.gui.show()
             self.visible = True
             self.executor.reset()
+        else:
+            self.showTriggerLastTime = time.time()
     
     def updateContent(self, data):     
         pos, cmds = data
